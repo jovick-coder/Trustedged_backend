@@ -103,6 +103,34 @@ const toggleUserAccount = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// Admin Disable Account Toggle (Protected, Admin Only)
+const changeUserAccountCurrency = async (req, res) => {
+  const { userId, isAdmin } = res.locals;
+  const { targetUserId, currency } = req.body;
+
+  if (!isAdmin) {
+    return res.status(403).json({ error: "Access denied" });
+  }
+
+  if (!currency) {
+    return res.status(400).json({ error: "Currency is required" });
+  }
+
+  try {
+    const user = await User.findById(targetUserId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    user.account = user.account || {};
+    user.account.currency = currency;
+    await user.save();
+    res.status(200).json({ message: "User account currency updated successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // delete user account by making deleted true
 const deleteUserAccount = async (req, res) => {
@@ -121,4 +149,4 @@ const deleteUserAccount = async (req, res) => {
   }
 };
 
-module.exports = { getUserProfile, getAllUserProfile, updateUserProfile, toggleUserAccount, deleteUserAccount };
+module.exports = { getUserProfile, getAllUserProfile, updateUserProfile, toggleUserAccount, changeUserAccountCurrency, deleteUserAccount };
