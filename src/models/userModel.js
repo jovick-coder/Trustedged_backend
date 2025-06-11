@@ -19,7 +19,8 @@ const UserSchema = new mongoose.Schema({
     number: { type: Number, required: true },
     name: { type: String, required: true },
     balance: { type: Number, default: 0 },
-    wallet: { type: String }
+    wallet: { type: String },
+    currency: { type: String, enum: ["USD"], default: 'USD' }, // Default currency
   },
 });
 
