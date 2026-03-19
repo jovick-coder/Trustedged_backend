@@ -14,7 +14,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use(cors());
+app.use(cors("*"));
 app.use("/api/email", emailRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", protect, userRoutes);
